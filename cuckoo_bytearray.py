@@ -1,5 +1,4 @@
 import mmh3
-from bitarray import bitarray
 import random
 import math
 
