@@ -86,4 +86,4 @@ Dependencies: `mmh3`.
 
 After this project I became an advocate of DS&A curriculum including filters. They should suffice as a good introduction to hashing while also holding benefits in cache locality. Since a bucket slot is a single byte (or less), the total footprint of the buffer is tiny and lookup is incredibly fast compared to full-key hashing thanks to CPU cache line behavior.
 
-I also hit a fun bug where my fingerprint hash and my index hash used seeds 0 and 1 in two separate places — meaning I was mixing them up and pulling correlated output. Lesson learned: pick your seeds intentionally.
+I also hit an interesting edge case bug where my fingerprint hash was 0 resulting in an unchanged hash (any value xor by 0 is it's self) instead of a separate bucket the value could be stored in.
