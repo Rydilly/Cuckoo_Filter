@@ -55,9 +55,10 @@ There are two implementations in this repo:
 - **`cuckoo.py`** — a straightforward version backed by a list of lists. Fixed 8-bit fingerprint, 4 slots per bucket.
 - **`cuckoo_bytearray.py`** — a more optimized version backed by a raw `bytearray` for better cache locality. Fingerprint size is computed from your target false positive rate.
 
-*cuckoo_bytearray is the 2nd iteration of cuckoo. If you wish to understand the logic of cuckoo algorithms I'd advise reading through cuckoo.
+*cuckoo_bytearray is the 2nd iteration of cuckoo. If you wish to understand the logic of cuckoo algorithms I'd advise reading through cuckoo.*
 
 ```python
+from cuckoo_bytearray import cuckoo_hash
 
 # capacity = items you plan to store
 # fpr = target false positive rate
@@ -76,10 +77,10 @@ Both files run a small self-test when executed directly:
 
 ```
 python cuckoo.py
-python cuckoo_bytearry.py
+python cuckoo_bytearray.py
 ```
 
-Dependencies: `mmh3`, `bytearray`.
+Dependencies: `mmh3`.
 
 ## What did I learn?
 
