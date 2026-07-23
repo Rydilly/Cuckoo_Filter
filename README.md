@@ -19,9 +19,7 @@ Cuckoo filters use fingerprints similar to my prior project on [Bloom_Filters](h
 
 ## Does it actually work?
 
-Yes. Running the self-tests in both files:
-
-- Every inserted item is found afterwards (no false negatives at reasonable load).
+- Every inserted item is found afterwards (no false negatives at reasonable load ($ \lambda $<.8)).
 - After inserting 3200 items and querying 10000, my false positive rate came out to about **0.004**.
 - The theoretical worst case is about **0.031** for `b=4` and `f=8`, so real-world performance ends up much better because most buckets aren't fully packed.
 
@@ -84,6 +82,8 @@ Dependencies: `mmh3`.
 
 ## What did I learn?
 
-After this project I became an advocate of DS&A curriculum including filters. They should suffice as a good introduction to hashing while also holding benefits in cache locality. Since a bucket slot is a single byte (or less), the total footprint of the buffer is tiny and lookup is incredibly fast compared to full-key hashing thanks to CPU cache line behavior.
+After this project I became an advocate of DS&A curriculum including filters. They should suffice as a good introduction to hashing while also showing how cache locality can be a hidden factor of time complexity. Let's be real this algorithm is dumb, but I would still put money on it outperforming a open addressing hash table.
 
-I also hit an interesting edge case bug where my fingerprint hash was 0 resulting in an unchanged hash (any value xor by 0 is it's self) instead of a separate bucket the value could be stored in.
+Since a bucket slot is a single byte (or less), the total footprint of the buffer is tiny and lookup is incredibly fast compared to full-key hashing thanks to CPU cache line behavior. I also liked the ability to add multiple duplicate values to the filter and delete one at a time.
+
+I hit an interesting edge case bug where the hash of my finger print was 0. Since I found the values other bucket by using xor on the hashed finger print the value would get rehashed to the same bucket, meaning its finger print contained duplicate locations. Also, my bytearray started as 0 to mean its empty. When a fingerprint with the hash of 0 got stored in that byte, future additions mistaked the slot as empty and data was lost. The fix was to simply bump and 0 fingerprints to 1. 
